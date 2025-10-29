@@ -7,7 +7,7 @@ import argparse
 
 from dots_ocr.model.inference import inference_with_vllm
 from dots_ocr.utils.consts import image_extensions, MIN_PIXELS, MAX_PIXELS
-from dots_ocr.utils.image_utils import get_image_by_fitz_doc, fetch_image, smart_resize
+from dots_ocr.utils.image_utils import get_image_by_fitz_doc, fetch_image
 from dots_ocr.utils.doc_utils import fitz_doc_to_image, load_images_from_pdf
 from dots_ocr.utils.prompts import dict_promptmode_to_prompt
 from dots_ocr.utils.layout_utils import post_process_output, draw_layout_on_image, pre_process_bboxes
@@ -163,7 +163,7 @@ class DotsOCRParser:
             image = fetch_image(image, min_pixels=min_pixels, max_pixels=max_pixels)
         else:
             image = fetch_image(origin_image, min_pixels=min_pixels, max_pixels=max_pixels)
-        input_height, input_width = smart_resize(image.height, image.width)
+        input_height, input_width = origin_image.height, origin_image.width
         prompt = self.get_prompt(prompt_mode, bbox, origin_image, image, min_pixels=min_pixels, max_pixels=max_pixels)
         if self.use_hf:
             response = self._inference_with_hf(image, prompt)
